@@ -6,6 +6,7 @@
       :data="data"
       :WhetherPage="WhetherPage"
       :paginginfo="paginginfo"
+      :Whentershowsearch="Whentershowsearch"
     />
     <Modal v-model="modal1" title="操作" @on-ok="ok" @on-cancel="cancel">
       <Input v-model="remark" type="textarea" :rows="4" placeholder="请输入审核备注" />
@@ -23,6 +24,7 @@ export default {
   data() {
     return {
       modal1: false,
+      Whentershowsearch: true,
       remark: "",
       paginginfo: {},
       ToExamineData: {},
@@ -38,49 +40,56 @@ export default {
           title: "ID",
           key: "newId",
           WhetherSearch: false,
-          WhetherEdit: false
+          WhetherEdit: false,
+          WhetherShow: true
         },
         {
           title: "微信号",
           key: "wechatId",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow: true
         },
         {
           title: "真实姓名",
           key: "name",
-          WhetherSearch: false,
+          WhetherSearch: true,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow: true
         },
         {
           title: "创建时间",
           key: "sc_TimeCreated",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow: true
         },
         {
           title: "修改时间",
           key: "sc_TimeLastMod",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow: true
         },
         {
           title: "提取金额",
           key: "amount",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow: true
         },
         {
           title: "状态",
           key: "auditStatusDes",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow: true
         },
 
         {
@@ -90,6 +99,7 @@ export default {
           align: "center",
           WhetherSearch: false,
           WhetherEdit: false,
+          WhetherShow: true,
           render: (h, params) => {
             if (params.row.auditStatus === 0) {
               return h("div", [
@@ -151,7 +161,7 @@ export default {
     getQueryCustomerWalletFlowPagedLists() {
       let tempdata = {
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 12,
         sortBy: "Sc_TimeCreated",
         sortType: "desc"
       };
@@ -203,10 +213,28 @@ export default {
   },
   mounted() {
     let that = this;
-    this.paginginfo.requesturl =
+    that.paginginfo.requesturl =
       "/api/CustomerWalletFlow/QueryCustomerWalletFlowPagedLists";
     EventBus.$on("pagingdata", function(data) {
       that.data = data;
+    });
+    EventBus.$on("Search", function(data) {
+      let tempdata = {
+        pageIndex: 1,
+        pageSize: 12,
+        sortBy: "Sc_TimeCreated",
+        sortType: "desc"
+      };
+      tempdata[data.SelectValue] = data.value;
+      QueryCustomerWalletFlowPagedLists(tempdata).then(res => {
+        if (res.data.statusCode == 1) {
+          that.data = res.data.data.items;
+          that.paginginfo.pageIndex = res.data.data.pageIndex;
+          that.paginginfo.pageSize = res.data.data.pageSize;
+          that.paginginfo.totalCount = res.data.data.totalCount;
+          that.paginginfo.totalPages = res.data.data.totalPages;
+        }
+      });
     });
   }
 };

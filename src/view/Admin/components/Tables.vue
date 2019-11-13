@@ -1,15 +1,24 @@
 <template>
-  <i-table :columns="columns" :data="data" stripe border></i-table>
+  <i-table :columns="tempcolumns" :data="data" stripe border></i-table>
 </template>
 <script>
 export default {
   data() {
-    return {};
+    return {
+      tempcolumns: []
+    };
   },
   props: {
     data: Array,
     columns: Array
   },
-
+  mounted() {
+    this.columns.forEach(item => {
+      if (item.WhetherShow) {
+        this.tempcolumns.push(item);
+      }
+    });
+   
+  }
 };
 </script>

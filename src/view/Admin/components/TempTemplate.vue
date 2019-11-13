@@ -1,7 +1,7 @@
 <template>
   <div>
     <TempButtonGroup :BottonGroupStore="BottonGroupStore" @emitevents="emitevents" />
-    <SearchBar :columns="columns" @Search="Search" />
+    <SearchBar :columns="columns" v-if="Whentershowsearch"/>
     <br />
     <Tables :columns="columns" :data="data" />
     <br />
@@ -31,7 +31,8 @@ export default {
     Modal: Boolean,
     ModalData: Object,
     WhetherPage: Boolean,
-    paginginfo:Object
+    paginginfo:Object,
+    Whentershowsearch:Boolean
   },
   mounted(){
     console.log(this.data)
@@ -42,9 +43,7 @@ export default {
       console.log(data);
     },
     // 搜索
-    Search(data) {
-      console.log(data);
-    }
+  
     // WhetherToDisplayModal(data){
     //    this.$emit("WhetherToDisplayModal", data);
     // }

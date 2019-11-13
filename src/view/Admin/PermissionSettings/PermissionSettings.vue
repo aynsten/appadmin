@@ -33,37 +33,43 @@ export default {
           title: "主键",
           key: "newId",
           WhetherSearch: true,
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "创建时间",
           key: "sc_TimeCreated",
           WhetherSearch: true,
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
          {
           title: "修改时间",
           key: "sc_TimeLastMod",
           WhetherSearch: true,
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
           {
           title: "修改人",
           key: "sc_UserIdLastMod",
           WhetherSearch: true,
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "账号",
           key: "account",
           WhetherSearch: true,
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "部门",
           key: "department",
           WhetherSearch: true,
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         
         {
@@ -71,7 +77,8 @@ export default {
           key: "newUserTypeDes",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "操作",
@@ -80,6 +87,7 @@ export default {
           align: "center",
           WhetherSearch: false,
           WhetherEdit: false,
+          WhetherShow:true,
           render: (h, params) => {
             return h("div", [
               h(

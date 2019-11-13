@@ -1,7 +1,12 @@
 <template>
   <div>
-    <i-select v-model="SelectValue" filterable >
-      <i-option v-for="(item,index) in columns" v-if="item.WhetherSearch" :value="item.title" :key="index" >{{ item.title }}</i-option>
+    <i-select v-model="SelectValue" filterable>
+      <i-option
+        v-for="(item,index) in columns"
+        v-if="item.WhetherSearch"
+        :value="item.key"
+        :key="index"
+      >{{ item.title }}</i-option>
     </i-select>
     <Input v-model="value" placeholder="Enter something..." style="width: 300px" />
     <Button type="primary" icon="ios-search" @click="Search">Search</Button>
@@ -9,6 +14,7 @@
 </template>
 
 <script>
+import { EventBus } from "../../../components/common/eventBus";
 export default {
   data() {
     return {
@@ -25,7 +31,15 @@ export default {
         SelectValue: this.SelectValue,
         value: this.value
       };
-      this.$emit("Search", SearchContext);
+      if (SearchContext.SelectValue == "") {
+        this.$Message.error("搜索条件不能为空");
+        return;
+      }
+      if (SearchContext.value == "") {
+        this.$Message.error("搜索内容不能为空");
+        return;
+      }
+      EventBus.$emit("Search", SearchContext);
     }
   }
 };
@@ -33,6 +47,6 @@ export default {
 
 <style>
 .ivu-select {
-    width: 20%;
+  width: 20%;
 }
 </style>

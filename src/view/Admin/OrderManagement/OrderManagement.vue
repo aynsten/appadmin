@@ -6,6 +6,7 @@
       :data="data"
       :WhetherPage="WhetherPage"
       :paginginfo="paginginfo"
+      :Whentershowsearch="Whentershowsearch"
     />
   </div>
 </template>
@@ -17,6 +18,7 @@ export default {
   data() {
     return {
       WhetherPage: true,
+      Whentershowsearch:true,
       paginginfo: {},
       BottonGroupStore: [
         // { MethodName: "Add", title: "新增", data: null },
@@ -28,81 +30,93 @@ export default {
           title: "订单号",
           key: "orderNo",
           WhetherSearch: true,
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "下单日期",
           key: "orderDate",
-          WhetherSearch: true,
-          WhetherEdit: true
+          WhetherSearch: false,
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "订单状态",
           key: "newOrderStatusDes",
-          WhetherSearch: false,
-          WhetherEdit: true
+          WhetherSearch: true,
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "用户",
           key: "customer",
-          WhetherSearch: true,
+          WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "国家",
           key: "country",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "仓库",
           key: "wareHouse",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "收入",
           key: "incomeMoney",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "订单金额",
           key: "totalAmount",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "分销花费金额",
           key: "disMoney",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
-          title: "其他额外费用",
+          title: "额外费用",
           key: "otherMoney",
           WhetherSearch: false,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "货币单位",
           key: "currency",
           WhetherSearch: false,
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "是否分销完结",
           key: "isClosed",
           WhetherSearch: true,
 
-          WhetherEdit: true
+          WhetherEdit: true,
+          WhetherShow:true,
         },
         {
           title: "操作",
@@ -111,6 +125,7 @@ export default {
           align: "center",
           WhetherSearch: false,
           WhetherEdit: false,
+          WhetherShow:true,
           render: (h, params) => {
             return h("div", [
               h(
@@ -141,21 +156,21 @@ export default {
           }
         }
       ],
-      data: []
+      data: [],
+      tempdata: {}
     };
   },
   components: {
     TempTemplate
   },
   created() {
-    let tempdata = {
-      isClosed: null,
+    this.tempdata = {
       pageIndex: 1,
       pageSize: 12,
       sortBy: "Sc_TimeCreated",
       sortType: "desc"
     };
-    OrderQueryOrder(tempdata).then(res => {
+    OrderQueryOrder(this.tempdata).then(res => {
       if (res.data.statusCode == 1) {
         this.data = res.data.data.items;
         this.paginginfo.pageIndex = res.data.data.pageIndex;
@@ -170,6 +185,24 @@ export default {
     this.paginginfo.requesturl = "/api/Order/QueryOrder";
     EventBus.$on("pagingdata", function(data) {
       that.data = data;
+    });
+    EventBus.$on("Search", function(data) {
+      that.tempdata = {
+        pageIndex: 1,
+        pageSize: 12,
+        sortBy: "Sc_TimeCreated",
+        sortType: "desc"
+      };
+      that.tempdata[data.SelectValue] = data.value;
+        OrderQueryOrder(that.tempdata).then(res => {
+      if (res.data.statusCode == 1) {
+        that.data = res.data.data.items;
+        that.paginginfo.pageIndex = res.data.data.pageIndex;
+        that.paginginfo.pageSize = res.data.data.pageSize;
+        that.paginginfo.totalCount = res.data.data.totalCount;
+        that.paginginfo.totalPages = res.data.data.totalPages;
+      }
+    });
     });
   },
   methods: {}
