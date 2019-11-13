@@ -7,6 +7,7 @@
       :WhetherPage="WhetherPage"
       :paginginfo="paginginfo"
       :Whentershowsearch="Whentershowsearch"
+      :WhetherDateSearch="WhetherDateSearch"
     />
   </div>
 </template>
@@ -18,8 +19,9 @@ export default {
   data() {
     return {
       WhetherPage: true,
-      Whentershowsearch:true,
+      Whentershowsearch: true,
       paginginfo: {},
+      WhetherDateSearch:true,
       BottonGroupStore: [
         // { MethodName: "Add", title: "新增", data: null },
         // { MethodName: "Refresh", title: "刷新", data: null },
@@ -31,21 +33,21 @@ export default {
           key: "orderNo",
           WhetherSearch: true,
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "下单日期",
           key: "orderDate",
           WhetherSearch: false,
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "订单状态",
           key: "newOrderStatusDes",
           WhetherSearch: true,
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "用户",
@@ -53,7 +55,7 @@ export default {
           WhetherSearch: false,
 
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "国家",
@@ -61,7 +63,7 @@ export default {
           WhetherSearch: false,
 
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "仓库",
@@ -69,7 +71,7 @@ export default {
           WhetherSearch: false,
 
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "收入",
@@ -77,7 +79,7 @@ export default {
           WhetherSearch: false,
 
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "订单金额",
@@ -85,7 +87,7 @@ export default {
           WhetherSearch: false,
 
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "分销花费金额",
@@ -93,7 +95,7 @@ export default {
           WhetherSearch: false,
 
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "额外费用",
@@ -101,14 +103,14 @@ export default {
           WhetherSearch: false,
 
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "货币单位",
           key: "currency",
           WhetherSearch: false,
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "是否分销完结",
@@ -116,7 +118,7 @@ export default {
           WhetherSearch: true,
 
           WhetherEdit: true,
-          WhetherShow:true,
+          WhetherShow: true
         },
         {
           title: "操作",
@@ -125,7 +127,7 @@ export default {
           align: "center",
           WhetherSearch: false,
           WhetherEdit: false,
-          WhetherShow:true,
+          WhetherShow: true,
           render: (h, params) => {
             return h("div", [
               h(
@@ -194,15 +196,36 @@ export default {
         sortType: "desc"
       };
       that.tempdata[data.SelectValue] = data.value;
-        OrderQueryOrder(that.tempdata).then(res => {
-      if (res.data.statusCode == 1) {
-        that.data = res.data.data.items;
-        that.paginginfo.pageIndex = res.data.data.pageIndex;
-        that.paginginfo.pageSize = res.data.data.pageSize;
-        that.paginginfo.totalCount = res.data.data.totalCount;
-        that.paginginfo.totalPages = res.data.data.totalPages;
-      }
+      OrderQueryOrder(that.tempdata).then(res => {
+        if (res.data.statusCode == 1) {
+          that.data = res.data.data.items;
+          that.paginginfo.pageIndex = res.data.data.pageIndex;
+          that.paginginfo.pageSize = res.data.data.pageSize;
+          that.paginginfo.totalCount = res.data.data.totalCount;
+          that.paginginfo.totalPages = res.data.data.totalPages;
+        }
+      });
     });
+    EventBus.$on("handleChange", function(data) {
+      that.tempdata = {
+        pageIndex: 1,
+        pageSize: 12,
+        sortBy: "Sc_TimeCreated",
+        sortType: "desc"
+      };
+      that.tempdata.orderDate = {
+        beginTime: data[0],
+        endTime: data[1]
+      };
+      OrderQueryOrder(that.tempdata).then(res => {
+        if (res.data.statusCode == 1) {
+          that.data = res.data.data.items;
+          that.paginginfo.pageIndex = res.data.data.pageIndex;
+          that.paginginfo.pageSize = res.data.data.pageSize;
+          that.paginginfo.totalCount = res.data.data.totalCount;
+          that.paginginfo.totalPages = res.data.data.totalPages;
+        }
+      });
     });
   },
   methods: {}

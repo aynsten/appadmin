@@ -10,6 +10,15 @@
     </i-select>
     <Input v-model="value" placeholder="Enter something..." style="width: 300px" />
     <Button type="primary" icon="ios-search" @click="Search">Search</Button>
+    &nbsp;&nbsp;
+    <DatePicker
+      type="daterange"
+      placement="bottom-end"
+      placeholder="Select date"
+      style="width: 200px"
+      @on-change="handleChange"
+      v-if="WhetherDateSearch"
+    ></DatePicker>
   </div>
 </template>
 
@@ -23,7 +32,8 @@ export default {
     };
   },
   props: {
-    columns: Array
+    columns: Array,
+    WhetherDateSearch:Boolean
   },
   methods: {
     Search() {
@@ -40,7 +50,10 @@ export default {
         return;
       }
       EventBus.$emit("Search", SearchContext);
-    }
+    },
+    handleChange(date) {
+      EventBus.$emit('handleChange',date)
+    },
   }
 };
 </script>

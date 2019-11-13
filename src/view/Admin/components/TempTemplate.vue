@@ -1,7 +1,7 @@
 <template>
   <div>
     <TempButtonGroup :BottonGroupStore="BottonGroupStore" @emitevents="emitevents" />
-    <SearchBar :columns="columns" v-if="Whentershowsearch"/>
+    <SearchBar :columns="columns" v-if="Whentershowsearch" :WhetherDateSearch="WhetherDateSearch"/>
     <br />
     <Tables :columns="columns" :data="data" />
     <br />
@@ -32,7 +32,8 @@ export default {
     ModalData: Object,
     WhetherPage: Boolean,
     paginginfo:Object,
-    Whentershowsearch:Boolean
+    Whentershowsearch:Boolean,
+    WhetherDateSearch:Boolean
   },
   mounted(){
     console.log(this.data)
